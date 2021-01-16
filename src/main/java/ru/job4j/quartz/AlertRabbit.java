@@ -2,18 +2,28 @@ package ru.job4j.quartz;
 
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+
 import static org.quartz.JobBuilder.*;
 import static org.quartz.TriggerBuilder.*;
 import static org.quartz.SimpleScheduleBuilder.*;
 
 public class AlertRabbit {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        Properties cfg = new Properties();
+        try (FileInputStream in = new FileInputStream("./rabbit.properties")) {
+            cfg.load(in);
+        }
         try {
             Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
             scheduler.start();
             JobDetail job = newJob(Rabbit.class).build();
             SimpleScheduleBuilder times = simpleSchedule()
-                    .withIntervalInSeconds(10)
+                    .withIntervalInSeconds(Integer.parseInt(cfg.getProperty("rabbit.interval")))
                     .repeatForever();
             Trigger trigger = newTrigger()
                     .startNow()
