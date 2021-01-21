@@ -6,6 +6,7 @@ import org.quartz.impl.StdSchedulerFactory;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 import static org.quartz.JobBuilder.*;
@@ -15,7 +16,8 @@ import static org.quartz.SimpleScheduleBuilder.*;
 public class AlertRabbit {
     public static void main(String[] args) throws IOException {
         Properties cfg = new Properties();
-        try (FileInputStream in = new FileInputStream("./rabbit.properties")) {
+         try (InputStream in = AlertRabbit.class.getClassLoader().
+                getResourceAsStream("rabbit.properties")) {
             cfg.load(in);
         }
         try {
