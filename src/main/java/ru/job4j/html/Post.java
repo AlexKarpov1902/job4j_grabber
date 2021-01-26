@@ -1,19 +1,31 @@
 package ru.job4j.html;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Post {
 
-    String link;
+    private String name;
 
-    String text;
+    private String link;
 
-    Date date;
+    private String text;
 
-    public Post(String link, String text, Date date) {
+    private Date date;
+
+    public Post(String name, String link, String text, Date date) {
+        this.name = name;
         this.link = link;
         this.text = text;
         this.date = date;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getLink() {
@@ -43,9 +55,27 @@ public class Post {
     @Override
     public String toString() {
         return "Post{"
-                + "link='" + link + '\''
+                + "name='" + name + '\''
+                + ", link='" + link + '\''
                 + ", text='" + text + '\''
                 + ", date=" + date
                 + '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Post post = (Post) o;
+        return Objects.equals(name, post.name) && Objects.equals(link, post.link) && Objects.equals(text, post.text) && Objects.equals(date, post.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, link, text, date);
     }
 }
