@@ -7,12 +7,17 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 public class SqlRuParse {
 
+    List<Post> listPosts;
+
     public SqlRuParse() {
+        listPosts = new ArrayList<>();
     }
 
     public void parse(String link) throws IOException, ParseException {
@@ -21,24 +26,25 @@ public class SqlRuParse {
         Elements row = doc.select(".postslisttopic");
         for (Element td : row) {
             Element href = td.child(0);
-            System.out.println(href.attr("href"));
-            System.out.println(href.text());
             Elements sibling = td.siblingElements();
             String txtDate = sibling.get(4).text();
             Date date = StringToDate.parse(txtDate);
-            System.out.println("дата: " + date);
+            listPosts.add(new Post(href.text(), href.attr("href"),
+                    "", date));
         }
+        listPosts.forEach(System.out::println);
     }
 
     public Post detail(String link) throws IOException, ParseException {
 
         Document doc = Jsoup.connect(link).get();
         String text = doc.select("td.msgBody").get(1).text();
-        System.out.println("text = " + text);   
+        System.out.println("text = " + text);
         String dateString = doc.select("td.msgFooter").get(1).text().substring(0, 16);
         Date date = StringToDate.parse(dateString);
         String name = doc.select("td.messageHeader").get(1).text();
         return new Post(name, link, text, date);
+
     }
 
     public static void main(String[] args) throws IOException, ParseException {
