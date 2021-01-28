@@ -71,11 +71,11 @@ public class Post {
             return false;
         }
         Post post = (Post) o;
-        return Objects.equals(name, post.name) && Objects.equals(link, post.link) && Objects.equals(text, post.text) && Objects.equals(date, post.date);
+        return Objects.equals(name, post.name) && Objects.equals(link, post.link) && Objects.equals(date, post.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, link, text, date);
+        return Objects.hash(name, link, date);
     }
 }
